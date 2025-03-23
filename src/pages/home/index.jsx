@@ -1,50 +1,112 @@
 import "./style.css";
 import Lixo from "../../assets/delete-icon.svg";
+import { useForm } from "react-hook-form";
 
-function Home() {
-  const users = [
-    {
-      id: "000001",
-      name: "Manel",
-      socialSec: "12345678901",
-      age: "29",
-      tel: "85987654321",
-      job: "Professor",
-      email: "emanuel@gmail.com",
-    },
-    {
-      id: "000002",
-      name: "Sara",
-      socialSec: "12345678902",
-      age: "32",
-      tel: "85987654320",
-      job: "Professora",
-      email: "sara@gmail.com",
-    },
-  ];
+const Home = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+  //   const users = [
+  //     {
+  //       id: "000001",
+  //       name: "Manel",
+  //       socialSec: "12345678901",
+  //       age: "29",
+  //       tel: "85987654321",
+  //       job: "Professor",
+  //       email: "emanuel@gmail.com",
+  //     },
+  //     {
+  //       id: "000002",
+  //       name: "Sara",
+  //       socialSec: "12345678902",
+  //       age: "32",
+  //       tel: "85987654320",
+  //       job: "Professora",
+  //       email: "sara@gmail.com",
+  //     },
+  //   ];
 
   return (
     <div className="container">
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <h1>Cadastro de Clientes</h1>
-        <input
-          placeholder="Nome"
-          name="nome completo / razão social"
-          type="text"
-        />
-        <input placeholder="CPF/CNPJ" name="CPF/CNPJ" type="number" />
-        <input placeholder="Idade" name="idade" type="number" />
-        <input placeholder="Telefone" name="Telefone" type="number" />
-        <input
-          placeholder="Área de atuação"
-          name="Area de atuação"
-          type="text"
-        />
-        <input placeholder="exemple@email.com.br" name="E-mail" type="email" />
-        <button type="button">Cadastrar</button>
+        <div>
+          <input
+            {...register("nome", { required: "Nome é obrigatório" })}
+            placeholder="Nome"
+          />
+          {errors.nome && <p>{errors.nome.message}</p>}
+        </div>
+
+        <div>
+          <input
+            {...register("cpfCnpj", {
+              required: "CPF/CNPJ é obrigatório",
+              pattern: {
+                value: /^\d{11}$|^\d{14}$/,
+                message: "CPF deve ter 11 dígitos ou CNPJ 14 dígitos",
+              },
+            })}
+            placeholder="CPF/CNPJ"
+          />
+          {errors.cpfCnpj && <p>{errors.cpfCnpj.message}</p>}
+        </div>
+
+        <div>
+          <input
+            {...register("idade", {
+              required: "Idade é obrigatória",
+              min: { value: 18, message: "Você deve ter pelo menos 18 anos" },
+              max: { value: 100, message: "Idade deve ser no máximo 100 anos" },
+            })}
+            type="number"
+            placeholder="Idade"
+          />
+          {errors.idade && <p>{errors.idade.message}</p>}
+        </div>
+
+        <div>
+          <input
+            {...register("telefone", {
+              required: "Telefone é obrigatório",
+              pattern: {
+                value: /^\d{10,11}$/,
+                message: "Telefone deve ter 10 ou 11 dígitos",
+              },
+            })}
+            placeholder="Telefone"
+          />
+          {errors.telefone && <p>{errors.telefone.message}</p>}
+        </div>
+
+        <div>
+          <input
+            {...register("profissao", { required: "Profissão é obrigatória" })}
+            placeholder="Profissão"
+          />
+          {errors.profissao && <p>{errors.profissao.message}</p>}
+        </div>
+
+        <div>
+          <input
+            {...register("email", {
+              required: "Email é obrigatório",
+              pattern: { value: /\S+@\S+\.\S+/, message: "Email inválido" },
+            })}
+            placeholder="Email"
+          />
+          {errors.email && <p>{errors.email.message}</p>}
+        </div>
+        <button type="submit">Cadastrar</button>
       </form>
 
-      {users.map((user) => (
+      {/* {users.map((user) => (
         <div key={user.id} className="card">
           <div>
             <p>
@@ -70,9 +132,9 @@ function Home() {
             <img src={Lixo} />
           </button>
         </div>
-      ))}
+      ))} */}
     </div>
   );
-}
+};
 
 export default Home;
