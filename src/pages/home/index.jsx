@@ -1,7 +1,15 @@
 import "./style.css";
 import Lixo from "../../assets/delete-icon.svg";
+import Input from "../../components/Input/Input";
+
+import { useState } from "react"
 
 function Home() {
+  const [cliente, setCliente] = useState({});
+  const [error, setError] = useState(false)
+
+  console.log(cliente)
+
   const users = [
     {
       id: "000001",
@@ -23,24 +31,76 @@ function Home() {
     },
   ];
 
+  const validateValue = (valueRaw) => {
+    if(valueRaw.length < 3) {
+      setError(true)
+    } else {
+      // setCliente((prev) => {
+      //   return {
+      //     name: valueRaw,
+      //     id: prev.id,
+      //     socialSec: prev.socialSec,
+      //     age: prev.age,
+      //     tel: prev.tel,
+      //     job: prev.job,
+      //     email: prev.email,
+      //   }})
+        
+      setCliente((prev) => ({
+        ...prev,
+        name: valueRaw,
+      }))
+      setError(false)
+    }
+  }
+
+  const setCPF = (value) => {
+    setCliente((prev) => ({
+      ...prev,
+      socialSec: value,
+    }))
+  }
+
+  const setIdade = (value) => {
+    setCliente((prev) => ({
+      ...prev,
+      age: value,
+    }))
+  }
+
+  const setTelefone = (value) => {
+    setCliente((prev) => ({
+      ...prev,
+      tel: value,
+    }))
+  }
+
+  const setJob = (value) => {
+    setCliente((prev) => ({
+      ...prev,
+      job: value,
+    }))
+  }
+
+  const setEmail = (value) => {
+    setCliente((prev) => ({
+      ...prev,
+      email: value,
+    }))
+  }
+
+
   return (
     <div className="container">
       <form>
         <h1>Cadastro de Clientes</h1>
-        <input
-          placeholder="Nome"
-          name="nome completo / razão social"
-          type="text"
-        />
-        <input placeholder="CPF/CNPJ" name="CPF/CNPJ" type="number" />
-        <input placeholder="Idade" name="idade" type="number" />
-        <input placeholder="Telefone" name="Telefone" type="number" />
-        <input
-          placeholder="Área de atuação"
-          name="Area de atuação"
-          type="text"
-        />
-        <input placeholder="exemple@email.com.br" name="E-mail" type="email" />
+        <Input placeholder="Nome" name="nome completo / razão social" type="text" onValueChange={(valueRaw) => validateValue(valueRaw)} />
+        {error && <span style={{color: '#F00'}}>Erro, o valor deve ter no mínimo 3 caracteres</span>}
+        <Input placeholder="CPF/CNPJ" name="CPF/CNPJ" type="number" onValueChange={setCPF} />
+        <Input placeholder="Idade" name="idade" type="number" onValueChange={setIdade} />
+        <Input placeholder="Telefone" name="Telefone" type="number" onValueChange={setTelefone} />
+        <Input placeholder="Área de atuação" name="Area de atuação" type="text" onValueChange={setJob} />
+        <Input placeholder="exemple@email.com.br" name="E-mail" type="email" onValueChange={setEmail} />
         <button type="button">Cadastrar</button>
       </form>
 
